@@ -1,7 +1,7 @@
 # KCI Org Management System (MERN)
 
 <h3 align="center">
-A full-stack MERN application to manage students, teachers, classes, and overall organization workflow.<br>
+A full-stack MERN application to manage organization workflow.<br>
 Built to simplify administration, track performance, and improve communication across the system.
 </h3>
 
