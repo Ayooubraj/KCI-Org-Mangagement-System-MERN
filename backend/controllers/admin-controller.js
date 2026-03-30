@@ -6,6 +6,8 @@ const Teacher = require('../models/teacherSchema.js');
 const Subject = require('../models/subjectSchema.js');
 const Notice = require('../models/noticeSchema.js');
 const Complain = require('../models/complainSchema.js');
+const Donor = require('../models/donorSchema.js');
+
 
 const adminRegister = async (req, res) => {
     try {
@@ -18,85 +20,49 @@ const adminRegister = async (req, res) => {
         });
 
         const existingAdminByEmail = await Admin.findOne({ email: req.body.email });
-        const existingSchool = await Admin.findOne({ schoolName: req.body.schoolName });
 
         if (existingAdminByEmail) {
             res.send({ message: 'Email already exists' });
-        }
-        else if (existingSchool) {
-            res.send({ message: 'School name already exists' });
         }
         else {
             let result = await admin.save();
             result.password = undefined;
             res.send(result);
         }
-    } catch (error) {
-        res.status(500).json(error);
-    }
+} catch (error) {
+  console.error("Error in adminRegister:", error.message);   // log message
+  console.error(error.stack);                                // log stack trace
+  res.status(500).json({ message: "Internal Server Error", details: error.message });
+}
 };
 
 const adminLogIn = async (req, res) => {
-    if (req.body.email && req.body.password) {
-        let admin = await Admin.findOne({ email: req.body.email });
-        if (admin) {
-            const validated = await bcrypt.compare(req.body.password, admin.password);
-            if (validated) {
-                admin.password = undefined;
-                res.send(admin);
+    try {
+        if (req.body.email && req.body.password) {
+            let admin = await Admin.findOne({ email: req.body.email });
+            if (admin) {
+                const validated = await bcrypt.compare(req.body.password, admin.password);
+                if (validated) {
+                    admin.password = undefined;
+                    res.send(admin);
+                } else {
+                    res.send({ message: "Invalid password" });
+                }
             } else {
-                res.send({ message: "Invalid password" });
+                res.send({ message: "User not found" });
             }
         } else {
-            res.send({ message: "User not found" });
+            res.send({ message: "Email and password are required" });
         }
-    } else {
-        res.send({ message: "Email and password are required" });
-    }
+} catch (error) {
+  console.error("Error in adminLogIn:", error.message);   // log message
+  console.error(error.stack);                                // log stack trace
+  res.status(500).json({ message: "Internal Server Error", details: error.message });
+}
+
 };
 
-// const adminRegister = async (req, res) => {
-//     try {
-//         const admin = new Admin({
-//             ...req.body
-//         });
 
-//         const existingAdminByEmail = await Admin.findOne({ email: req.body.email });
-//         const existingSchool = await Admin.findOne({ schoolName: req.body.schoolName });
-
-//         if (existingAdminByEmail) {
-//             res.send({ message: 'Email already exists' });
-//         }
-//         else if (existingSchool) {
-//             res.send({ message: 'School name already exists' });
-//         }
-//         else {
-//             let result = await admin.save();
-//             result.password = undefined;
-//             res.send(result);
-//         }
-//     } catch (err) {
-//         res.status(500).json(err);
-//     }
-// };
-
-// const adminLogIn = async (req, res) => {
-//     if (req.body.email && req.body.password) {
-//         let admin = await Admin.findOne({ email: req.body.email });
-//         if (admin) {
-//             if (req.body.password === admin.password) {
-//                 admin.password = undefined;
-//                 res.send(admin);
-//             } else {
-//                 res.send({ message: "Invalid password" });
-//             }
-//         } else {
-//             res.send({ message: "User not found" });
-//         }
-//     } else {
-//         res.send({ message: "Email and password are required" });
-//     }
-// };
 
 const getAdminDetail = async (req, res) => {
     try {
@@ -108,9 +74,12 @@ const getAdminDetail = async (req, res) => {
         else {
             res.send({ message: "No admin found" });
         }
-    } catch (error) {
-        res.status(500).json(error);
-    }
+} catch (error) {
+  console.error("Error in getAdminDetail:", error.message);   // log message
+  console.error(error.stack);                                // log stack trace
+  res.status(500).json({ message: "Internal Server Error", details: error.message });
+}
+
 }
 
 const deleteAdmin = async (req, res) => {
@@ -126,7 +95,9 @@ const deleteAdmin = async (req, res) => {
 
     res.send(result);
   } catch (error) {
-    res.status(500).json(error); // ✅ use 'error', not 'err'
+    console.error("Error in deleteAdmin:", error.message);   // log message
+    console.error(error.stack);                                // log stack trace
+    res.status(500).json({ message: "Internal Server Error", details: error.message });
   }
 };
 
@@ -135,7 +106,7 @@ const updateAdmin = async (req, res) => {
     try {
         if (req.body.password) {
             const salt = await bcrypt.genSalt(10)
-            res.body.password = await bcrypt.hash(res.body.password, salt)
+            req.body.password = await bcrypt.hash(req.body.password, salt)
         }
         let result = await Admin.findByIdAndUpdate(req.params.id,
             { $set: req.body },
@@ -143,10 +114,52 @@ const updateAdmin = async (req, res) => {
 
         result.password = undefined;
         res.send(result)
-    } catch (error) {
-        res.status(500).json(error);
-    }
+} catch (error) {
+  console.error("Error in updateAdmin:", error.message);   // log message
+  console.error(error.stack);                                // log stack trace
+  res.status(500).json({ message: "Internal Server Error", details: error.message });
 }
 
-module.exports = { adminRegister, adminLogIn, getAdminDetail, deleteAdmin, updateAdmin };
+
+}
+
+
+// List all students (Admin view)
+const listStudents = async (req, res) => {
+  try {
+    const students = await Student.find()
+      .populate("donors")
+      .populate("school")
+      .populate("region");
+    res.status(200).json({ count: students.length, students });
+  } catch (error) {
+    console.error("Error in listStudents:", error.message);   // log message
+    console.error(error.stack);                                // log stack trace
+    res.status(500).json({ message: "Internal Server Error", details: error.message });
+  }
+};
+
+// List all donors (Admin view)
+const listDonors = async (req, res) => {
+  try {
+    const donors = await Donor.find().populate("students");
+    res.status(200).json({ count: donors.length, donors });
+} catch (error) {
+  console.error("Error in listDonors:", error.message);   // log message
+  console.error(error.stack);                                // log stack trace
+  res.status(500).json({ message: "Internal Server Error", details: error.message });
+}
+};
+
+
+module.exports = { 
+    adminRegister,
+    adminLogIn,
+    getAdminDetail, 
+    deleteAdmin, 
+    updateAdmin,
+    listStudents,
+    listDonors 
+};
+
 

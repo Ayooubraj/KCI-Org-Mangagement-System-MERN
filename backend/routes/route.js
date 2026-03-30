@@ -5,7 +5,9 @@ const {
   adminLogIn, 
   deleteAdmin, 
   getAdminDetail, 
-  updateAdmin 
+  updateAdmin,
+  listStudents,
+  listDonors
 } = require('../controllers/admin-controller.js');
 
 const { 
@@ -90,6 +92,14 @@ router.post('/AdminLogin', adminLogIn);
 router.get("/Admin/:id", getAdminDetail);
 router.delete("/Admin/:id", deleteAdmin);
 router.put("/Admin/:id", updateAdmin);
+
+
+// listing rotes for admin
+router.get("/AdminStudents", listStudents);
+router.get("/AdminDonors", listDonors);
+
+
+
 
 // ---------------- Student ----------------
 router.post('/StudentReg', studentRegister);
@@ -179,6 +189,8 @@ router.get('/Regions', getRegions);
 // School
 router.post('/SchoolCreate', schoolCreate);
 router.get('/Schools', getSchools);
+
+
 
 
 module.exports = router;
