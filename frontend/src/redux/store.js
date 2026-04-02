@@ -5,16 +5,21 @@ import { noticeReducer } from './noticeRelated/noticeSlice';
 import { sclassReducer } from './sclassRelated/sclassSlice';
 import { teacherReducer } from './teacherRelated/teacherSlice';
 import { complainReducer } from './complainRelated/complainSlice';
+import donorReducer from "./donorRelated/donorSlice";
+
 
 const store = configureStore({
     reducer: {
         user: userReducer,
-        student: studentReducer,
+        student: studentReducer, 
         teacher: teacherReducer,
         notice: noticeReducer,
         complain: complainReducer,
-        sclass: sclassReducer
+        sclass: sclassReducer,
+        donor: donorReducer
     },
 });
+
+
 
 export default store;
