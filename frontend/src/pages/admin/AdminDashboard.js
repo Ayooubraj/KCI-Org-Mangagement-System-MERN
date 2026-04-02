@@ -20,7 +20,6 @@ import AdminHomePage from './AdminHomePage';
 
 import AddStudent from './studentRelated/AddStudent';
 import SeeComplains from './studentRelated/SeeComplains';
-import ShowStudents from './studentRelated/ShowStudents';
 import StudentAttendance from './studentRelated/StudentAttendance';
 import StudentExamMarks from './studentRelated/StudentExamMarks';
 import ViewStudent from './studentRelated/ViewStudent';
@@ -42,6 +41,10 @@ import AddClass from './classRelated/AddClass';
 import ClassDetails from './classRelated/ClassDetails';
 import ShowClasses from './classRelated/ShowClasses';
 import AccountMenu from '../../components/AccountMenu';
+
+import ShowDonors from './donorRelated/ShowDonors'; // ✅ new
+import ShowStudents from './studentRelated/ShowStudents';
+
 
 const AdminDashboard = () => {
     const [open, setOpen] = useState(false);
@@ -127,6 +130,8 @@ const AdminDashboard = () => {
                         <Route path="/Admin/students/student/attendance/:id" element={<StudentAttendance situation="Student" />} />
                         <Route path="/Admin/students/student/marks/:id" element={<StudentExamMarks situation="Student" />} />
 
+                        {/* <Route path="/Admin/students" element={<ShowStudents />} /> */}
+
                         {/* Teacher */}
                         <Route path="/Admin/teachers" element={<ShowTeachers />} />
                         <Route path="/Admin/teachers/teacher/:id" element={<TeacherDetails />} />
@@ -134,6 +139,9 @@ const AdminDashboard = () => {
                         <Route path="/Admin/teachers/choosesubject/:id" element={<ChooseSubject situation="Norm" />} />
                         <Route path="/Admin/teachers/choosesubject/:classID/:teacherID" element={<ChooseSubject situation="Teacher" />} />
                         <Route path="/Admin/teachers/addteacher/:id" element={<AddTeacher />} />
+
+                        {/* Show Donors */}
+                        <Route path="/Admin/donors" element={<ShowDonors />} />
 
                         <Route path="/logout" element={<Logout />} />
                     </Routes>
