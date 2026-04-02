@@ -56,6 +56,7 @@ const studentRegister = async (req, res) => {
       address,
       budget,
       region
+      
     });
 
     await student.save();
@@ -107,7 +108,8 @@ const getStudents = async (req, res) => {
   try {
     const students = await Student.find()
       .populate("donors")
-      .populate("school");
+      .populate("school")
+      .populate("region");
 
     res.status(200).json({
       count: students.length,

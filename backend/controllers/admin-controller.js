@@ -142,7 +142,7 @@ const listStudents = async (req, res) => {
 // List all donors (Admin view)
 const listDonors = async (req, res) => {
   try {
-    const donors = await Donor.find().populate("students");
+    const donors = await Donor.find().populate("studentsSponsored");
     res.status(200).json({ count: donors.length, donors });
 } catch (error) {
   console.error("Error in listDonors:", error.message);   // log message
