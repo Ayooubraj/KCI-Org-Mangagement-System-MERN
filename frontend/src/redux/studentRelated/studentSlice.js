@@ -27,6 +27,8 @@ const studentSlice = createSlice({
             state.error = null;
             state.response = null;
         },
+
+        
         getFailed: (state, action) => {
             state.response = action.payload;
             state.loading = false;
