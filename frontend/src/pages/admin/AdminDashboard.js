@@ -10,8 +10,7 @@ import {
 } from '@mui/material';
 import MenuIcon from '@mui/icons-material/Menu';
 import ChevronLeftIcon from '@mui/icons-material/ChevronLeft';
-import { Navigate, Route, Routes } from 'react-router-dom';
-// import { AppBar, Drawer } from '../../components/styles';
+import { Navigate, Route, Routes, useNavigate } from 'react-router-dom';
 import { AppBar, Drawer } from '../../components/styles';
 import Logout from '../Logout';
 import SideBar from './SideBar';
@@ -42,15 +41,30 @@ import ClassDetails from './classRelated/ClassDetails';
 import ShowClasses from './classRelated/ShowClasses';
 import AccountMenu from '../../components/AccountMenu';
 
-import ShowDonors from './donorRelated/ShowDonors'; // ✅ new
+import ShowDonors from './donorRelated/ShowDonors';
 import ShowStudents from './studentRelated/ShowStudents';
 
+// ✅ SpeedDial imports
+import SpeedDialTemplate from '../../components/SpeedDialTemplate';
+import PersonAddIcon from '@mui/icons-material/PersonAdd';
 
 const AdminDashboard = () => {
     const [open, setOpen] = useState(false);
     const toggleDrawer = () => {
         setOpen(!open);
     };
+
+    const navigate = useNavigate();
+
+    // ✅ Define SpeedDial actions
+    const actions = [
+        {
+            icon: <PersonAddIcon />,
+            name: "Add Student",
+            action: () => navigate("/Admin/addstudents"),
+        },
+        // You can add more quick actions here (e.g., View Students, Add Donor, etc.)
+    ];
 
     return (
         <>
@@ -95,6 +109,10 @@ const AdminDashboard = () => {
                 </Drawer>
                 <Box component="main" sx={styles.boxStyled}>
                     <Toolbar />
+
+                    {/* ✅ SpeedDial floating menu */}
+                    <SpeedDialTemplate actions={actions} />
+
                     <Routes>
                         <Route path="/" element={<AdminHomePage />} />
                         <Route path='*' element={<Navigate to="/" />} />
@@ -110,10 +128,8 @@ const AdminDashboard = () => {
                         <Route path="/Admin/subjects" element={<ShowSubjects />} />
                         <Route path="/Admin/subjects/subject/:classID/:subjectID" element={<ViewSubject />} />
                         <Route path="/Admin/subjects/chooseclass" element={<ChooseClass situation="Subject" />} />
-
                         <Route path="/Admin/addsubject/:id" element={<SubjectForm />} />
                         <Route path="/Admin/class/subject/:classID/:subjectID" element={<ViewSubject />} />
-
                         <Route path="/Admin/subject/student/attendance/:studentID/:subjectID" element={<StudentAttendance situation="Subject" />} />
                         <Route path="/Admin/subject/student/marks/:studentID/:subjectID" element={<StudentExamMarks situation="Subject" />} />
 
@@ -129,8 +145,6 @@ const AdminDashboard = () => {
                         <Route path="/Admin/students/student/:id" element={<ViewStudent />} />
                         <Route path="/Admin/students/student/attendance/:id" element={<StudentAttendance situation="Student" />} />
                         <Route path="/Admin/students/student/marks/:id" element={<StudentExamMarks situation="Student" />} />
-
-                        {/* <Route path="/Admin/students" element={<ShowStudents />} /> */}
 
                         {/* Teacher */}
                         <Route path="/Admin/teachers" element={<ShowTeachers />} />
@@ -151,7 +165,7 @@ const AdminDashboard = () => {
     );
 }
 
-export default AdminDashboard
+export default AdminDashboard;
 
 const styles = {
     boxStyled: {
@@ -178,4 +192,4 @@ const styles = {
             display: 'none',
         },
     },
-}
+};
