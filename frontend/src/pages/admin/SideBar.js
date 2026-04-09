@@ -23,12 +23,14 @@ const SideBar = () => {
                     </ListItemIcon>
                     <ListItemText primary="Home" />
                 </ListItemButton>
-                <ListItemButton component={Link} to="/Admin/classes">
+                
+                <ListItemButton component={Link} to="/Admin/donors">
                     <ListItemIcon>
-                        <ClassOutlinedIcon color={location.pathname.startsWith('/Admin/classes') ? 'primary' : 'inherit'} />
+                        <ClassOutlinedIcon color={location.pathname.startsWith('/Admin/donors') ? 'primary' : 'inherit'} />
                     </ListItemIcon>
                     <ListItemText primary="Donors" />
-                </ListItemButton>
+                    </ListItemButton>
+
                 <ListItemButton component={Link} to="/Admin/subjects">
                     <ListItemIcon>
                         <AssignmentIcon color={location.pathname.startsWith("/Admin/subjects") ? 'primary' : 'inherit'} />
