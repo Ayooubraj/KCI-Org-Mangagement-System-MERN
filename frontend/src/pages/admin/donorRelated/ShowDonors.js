@@ -42,7 +42,7 @@ const ShowDonors = () => {
             <TableHead>
               <TableRow>
                 <TableCell>Donor Name</TableCell>
-                <TableCell>Email</TableCell>
+                <TableCell>Country</TableCell>
                 <TableCell>Sponsored Students</TableCell>
               </TableRow>
             </TableHead>
@@ -50,10 +50,10 @@ const ShowDonors = () => {
               {donorsList.map((donor) => (
                 <TableRow key={donor._id}>
                   <TableCell>{donor.name}</TableCell>
-                  <TableCell>{donor.email}</TableCell>
+                  <TableCell>{donor.country}</TableCell>
                   <TableCell>
-                    {donor.students && donor.students.length > 0
-                      ? donor.students.map((s) => s.studentNumber).join(", ")
+                    {donor.studentsSponsored && donor.studentsSponsored.length > 0
+                      ? donor.studentsSponsored.map((s) => s.studentNumber).join(", ")
                       : "None"}
                   </TableCell>
                 </TableRow>
