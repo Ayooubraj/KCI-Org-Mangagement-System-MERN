@@ -1,142 +1,132 @@
-import React, { useEffect, useState } from 'react';
-import { useNavigate, useParams } from 'react-router-dom';
-import { useDispatch, useSelector } from 'react-redux';
-import { registerUser } from '../../../redux/userRelated/userHandle';
-import Popup from '../../../components/Popup';
-import { underControl } from '../../../redux/userRelated/userSlice';
-import { getAllSclasses } from '../../../redux/sclassRelated/sclassHandle';
-import { CircularProgress } from '@mui/material';
+import React, { useState, useEffect } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import { useNavigate } from "react-router-dom";
+import { createStudent } from "../../../redux/studentRelated/studentHandle";
+import { getAllDonors } from "../../../redux/donorRelated/donorHandle";
+import {
+  Container, Paper, Typography, Grid, TextField, Button, MenuItem, Alert
+} from "@mui/material";
 
-const AddStudent = ({ situation }) => {
-    const dispatch = useDispatch()
-    const navigate = useNavigate()
-    const params = useParams()
+const AddStudent = () => {
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
 
-    const userState = useSelector(state => state.user);
-    const { status, currentUser, response, error } = userState;
-    const { sclassesList } = useSelector((state) => state.sclass);
+  const { donorsList } = useSelector((state) => state.donor);
+  const { loading, response, error, statestatus } = useSelector((state) => state.student);
 
-    const [name, setName] = useState('');
-    const [rollNum, setRollNum] = useState('');
-    const [password, setPassword] = useState('')
-    const [className, setClassName] = useState('')
-    const [sclassName, setSclassName] = useState('')
+  const [formData, setFormData] = useState({
+    firstname: "",
+    surname: "",
+    dob: "",
+    grade: "",
+    gender: "",
+    address: "",
+    bio: "",
+    profilePic: null,
+    birthCertificate: null,
+    parentCitizenship1: null,
+    parentCitizenship2: null,
+    familyPic: null,
+    donors: []
+  });
 
-    const adminID = currentUser._id
-    const role = "Student"
-    const attendance = []
+  useEffect(() => {
+    dispatch(getAllDonors());
+  }, [dispatch]);
 
-    useEffect(() => {
-        if (situation === "Class") {
-            setSclassName(params.id);
-        }
-    }, [params.id, situation]);
-
-    const [showPopup, setShowPopup] = useState(false);
-    const [message, setMessage] = useState("");
-    const [loader, setLoader] = useState(false)
-
-    useEffect(() => {
-        dispatch(getAllSclasses(adminID, "Sclass"));
-    }, [adminID, dispatch]);
-
-    const changeHandler = (event) => {
-        if (event.target.value === 'Select Class') {
-            setClassName('Select Class');
-            setSclassName('');
-        } else {
-            const selectedClass = sclassesList.find(
-                (classItem) => classItem.sclassName === event.target.value
-            );
-            setClassName(selectedClass.sclassName);
-            setSclassName(selectedClass._id);
-        }
+  // ✅ Redirect after successful creation
+  useEffect(() => {
+    if (statestatus === "added") {
+      navigate("/Admin/students");
     }
+  }, [statestatus, navigate]);
 
-    const fields = { name, rollNum, password, sclassName, adminID, role, attendance }
+  const handleChange = (e) => {
+    setFormData({ ...formData, [e.target.name]: e.target.value });
+  };
 
-    const submitHandler = (event) => {
-        event.preventDefault()
-        if (sclassName === "") {
-            setMessage("Please select a classname")
-            setShowPopup(true)
-        }
-        else {
-            setLoader(true)
-            dispatch(registerUser(fields, role))
-        }
-    }
+  const handleFileChange = (e) => {
+    setFormData({ ...formData, [e.target.name]: e.target.files[0] });
+  };
 
-    useEffect(() => {
-        if (status === 'added') {
-            dispatch(underControl())
-            navigate(-1)
-        }
-        else if (status === 'failed') {
-            setMessage(response)
-            setShowPopup(true)
-            setLoader(false)
-        }
-        else if (status === 'error') {
-            setMessage("Network Error")
-            setShowPopup(true)
-            setLoader(false)
-        }
-    }, [status, navigate, error, response, dispatch]);
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    dispatch(createStudent(formData));
+  };
 
-    return (
-        <>
-            <div className="register">
-                <form className="registerForm" onSubmit={submitHandler}>
-                    <span className="registerTitle">Add Student</span>
-                    <label>Name</label>
-                    <input className="registerInput" type="text" placeholder="Enter student's name..."
-                        value={name}
-                        onChange={(event) => setName(event.target.value)}
-                        autoComplete="name" required />
+  return (
+    <Container maxWidth="md" sx={{ mt: 4 }}>
+      <Paper sx={{ p: 3 }}>
+        <Typography variant="h5">Add Student Profile</Typography>
+        <form onSubmit={handleSubmit}>
+          <Grid container spacing={2} sx={{ mt: 2 }}>
+            {/* Basic Info */}
+            <Grid item xs={6}>
+              <TextField required label="First Name" name="firstname" fullWidth onChange={handleChange} />
+            </Grid>
+            <Grid item xs={6}>
+              <TextField required label="Surname" name="surname" fullWidth onChange={handleChange} />
+            </Grid>
+            <Grid item xs={6}>
+              <TextField type="date" label="DOB" name="dob" fullWidth InputLabelProps={{ shrink: true }} onChange={handleChange} />
+            </Grid>
+            <Grid item xs={6}>
+              <TextField required label="Grade" name="grade" fullWidth onChange={handleChange} />
+            </Grid>
+            <Grid item xs={6}>
+              <TextField select required label="Gender" name="gender" fullWidth onChange={handleChange}>
+                <MenuItem value="Male">Male</MenuItem>
+                <MenuItem value="Female">Female</MenuItem>
+                <MenuItem value="Other">Other</MenuItem>
+              </TextField>
+            </Grid>
+            <Grid item xs={12}>
+              <TextField label="Address" name="address" fullWidth onChange={handleChange} />
+            </Grid>
+            <Grid item xs={12}>
+              <TextField label="Bio" name="bio" fullWidth multiline rows={3} onChange={handleChange} />
+            </Grid>
 
-                    {
-                        situation === "Student" &&
-                        <>
-                            <label>Class</label>
-                            <select
-                                className="registerInput"
-                                value={className}
-                                onChange={changeHandler} required>
-                                <option value='Select Class'>Select Class</option>
-                                {sclassesList.map((classItem, index) => (
-                                    <option key={index} value={classItem.sclassName}>
-                                        {classItem.sclassName}
-                                    </option>
-                                ))}
-                            </select>
-                        </>
-                    }
+            {/* File Uploads */}
+            {["profilePic","birthCertificate","parentCitizenship1","parentCitizenship2","familyPic"].map((field) => (
+              <Grid item xs={12} key={field}>
+                <Typography variant="subtitle1">{field}</Typography>
+                <input type="file" name={field} onChange={handleFileChange} />
+              </Grid>
+            ))}
 
-                    <label>Roll Number</label>
-                    <input className="registerInput" type="number" placeholder="Enter student's Roll Number..."
-                        value={rollNum}
-                        onChange={(event) => setRollNum(event.target.value)}
-                        required />
+            {/* Donor Assignment */}
+            <Grid item xs={12}>
+              <TextField
+                select
+                label="Assign Donors"
+                name="donors"
+                fullWidth
+                SelectProps={{ multiple: true }}
+                value={formData.donors}
+                onChange={handleChange}
+              >
+                {donorsList.map((donor) => (
+                  <MenuItem key={donor._id} value={donor._id}>{donor.name}</MenuItem>
+                ))}
+              </TextField>
+            </Grid>
 
-                    <label>Password</label>
-                    <input className="registerInput" type="password" placeholder="Enter student's password..."
-                        value={password}
-                        onChange={(event) => setPassword(event.target.value)}
-                        autoComplete="new-password" required />
+            {/* Submit */}
+            <Grid item xs={12}>
+              <Button type="submit" variant="contained" color="primary" disabled={loading}>
+                {loading ? "Saving..." : "Save Student"}
+              </Button>
+            </Grid>
+          </Grid>
+        </form>
 
-                    <button className="registerButton" type="submit" disabled={loader}>
-                        {loader ? (
-                            <CircularProgress size={24} color="inherit" />
-                        ) : (
-                            'Add'
-                        )}
-                    </button>
-                </form>
-            </div>
-            <Popup message={message} setShowPopup={setShowPopup} showPopup={showPopup} />
-        </>
-    )
-}
+        {/* Feedback */}
+        {response && <Alert severity="success">{response}</Alert>}
+        {error && <Alert severity="error">{error}</Alert>}
+      </Paper>
+    </Container>
+  );
+};
 
-export default AddStudent
+export default AddStudent;
