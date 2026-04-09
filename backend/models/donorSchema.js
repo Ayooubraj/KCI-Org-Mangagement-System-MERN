@@ -13,7 +13,7 @@ const donorSchema = new mongoose.Schema({
   studentsSponsored: [
     {
       type: mongoose.Schema.Types.ObjectId,
-      ref: 'student'
+      ref: 'Student'
     }
   ]
 });
