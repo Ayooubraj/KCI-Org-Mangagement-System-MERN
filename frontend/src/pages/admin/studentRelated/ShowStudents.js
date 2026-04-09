@@ -159,16 +159,13 @@ const ShowStudents = () => {
   };
 
   // SpeedDial actions (floating menu)
-  const actions = [
-    {
-      icon: <PersonAddAlt1Icon color="primary" />, name: 'Add New Student',
-      action: () => navigate("/Admin/addstudents")
-    },
-    {
-      icon: <PersonRemoveIcon color="error" />, name: 'Delete All Students',
-      action: () => deleteHandler(currentUser._id, "Students")
-    },
-  ];
+const actions = [
+  {
+    icon: <PersonAddAlt1Icon color="primary" />,
+    name: 'Add New Student',
+    action: () => navigate("/Admin/students/add")   // ✅ new Student Profile page
+  },
+];
 
   return (
     <>
