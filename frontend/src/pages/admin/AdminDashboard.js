@@ -17,7 +17,7 @@ import SideBar from './SideBar';
 import AdminProfile from './AdminProfile';
 import AdminHomePage from './AdminHomePage';
 
-import AddStudent from './studentRelated/AddStudent';
+import AddStudent from './studentRelated/AddStudent/AddStudent';
 import SeeComplains from './studentRelated/SeeComplains';
 import StudentAttendance from './studentRelated/StudentAttendance';
 import StudentExamMarks from './studentRelated/StudentExamMarks';

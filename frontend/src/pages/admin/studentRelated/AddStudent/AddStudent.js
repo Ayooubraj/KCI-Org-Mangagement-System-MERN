@@ -1,11 +1,13 @@
 import React, { useState, useEffect } from "react";
+import {
+  Container, Paper, Typography, Grid, TextField, Button, MenuItem,
+  FormGroup, FormControlLabel, Checkbox, Alert
+} from "@mui/material";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
-import { createStudent } from "../../../redux/studentRelated/studentHandle";
-import { getAllDonors } from "../../../redux/donorRelated/donorHandle";
-import {
-  Container, Paper, Typography, Grid, TextField, Button, MenuItem, Alert, Checkbox, FormControlLabel
-} from "@mui/material";
+import { createStudent } from "../../../../redux/studentRelated/studentHandle";
+import { getAllDonors } from "../../../../redux/donorRelated/donorHandle";
+import "../AddStudent/AddStudent.css";
 
 const AddStudent = () => {
   const dispatch = useDispatch();
@@ -108,17 +110,49 @@ const AddStudent = () => {
     });
   };
 
+  const handleDonorToggle = (donorId) => {
+    let newDonors = [...formData.donors];
+    if (newDonors.includes(donorId)) {
+      newDonors = newDonors.filter((id) => id !== donorId);
+    } else {
+      newDonors.push(donorId);
+    }
+    setFormData({ ...formData, donors: newDonors });
+  };
+
   const handleSubmit = (e) => {
     e.preventDefault();
-    dispatch(createStudent(formData));
+    const data = new FormData();
+    Object.keys(formData).forEach((key) => {
+      if (Array.isArray(formData[key])) {
+        formData[key].forEach((val, i) => {
+          if (typeof val === "object") {
+            Object.keys(val).forEach((subKey) =>
+              data.append(`${key}[${i}][${subKey}]`, val[subKey])
+            );
+          } else {
+            data.append(`${key}[${i}]`, val);
+          }
+        });
+      } else if (typeof formData[key] === "object" && formData[key] !== null) {
+        Object.keys(formData[key]).forEach((subKey) =>
+          data.append(`${key}[${subKey}]`, formData[key][subKey])
+        );
+      } else {
+        data.append(key, formData[key]);
+      }
+    });
+    dispatch(createStudent(data));
   };
 
   return (
-    <Container maxWidth="md" sx={{ mt: 4 }}>
-      <Paper sx={{ p: 3 }}>
-        <Typography variant="h5" gutterBottom>KARUNA CARE STUDENT QUESTIONNAIRE</Typography>
-        <form onSubmit={handleSubmit}>
-          <Grid container spacing={2} sx={{ mt: 2 }}>
+    <Container className="add-student-container">
+      <Paper className="add-student-paper">
+        <Typography variant="h5" gutterBottom>
+          KARUNA CARE STUDENT QUESTIONNAIRE
+        </Typography>
+        <form onSubmit={handleSubmit} className="add-student-form">
+          <Grid container spacing={2}>
 
             {/* Profile Picture */}
             <Grid item xs={12}>
@@ -142,13 +176,15 @@ const AddStudent = () => {
             <Grid item xs={6}><TextField label="Phone" name="phone" fullWidth onChange={handleChange} /></Grid>
             <Grid item xs={6}><TextField label="Current Address" name="currentAddress" fullWidth onChange={handleChange} /></Grid>
 
-            {/* Health & Family */}
-            <Grid item xs={6}><TextField select label="Health Status" name="healthStatus" fullWidth onChange={handleChange}>
-              <MenuItem value="Good">Good</MenuItem>
-              <MenuItem value="Fair">Fair</MenuItem>
-              <MenuItem value="Bad">Bad</MenuItem>
-              <MenuItem value="Dead">Dead</MenuItem>
-            </TextField></Grid>
+            {/* Health */}
+            <Grid item xs={6}>
+              <TextField select label="Health Status" name="healthStatus" fullWidth onChange={handleChange}>
+                <MenuItem value="Good">Good</MenuItem>
+                <MenuItem value="Fair">Fair</MenuItem>
+                <MenuItem value="Bad">Bad</MenuItem>
+                <MenuItem value="Dead">Dead</MenuItem>
+              </TextField>
+            </Grid>
             <Grid item xs={6}><TextField label="Specify Health" name="healthSpecify" fullWidth onChange={handleChange} /></Grid>
 
             {/* File Uploads */}
@@ -169,26 +205,33 @@ const AddStudent = () => {
 
             {/* Donor Assignment */}
             <Grid item xs={12}>
-              <TextField select label="Assign Donors" name="donors" fullWidth SelectProps={{ multiple: true }}
-                value={formData.donors} onChange={handleChange}>
-                {donorsList.map((donor) => (
-                  <MenuItem key={donor._id} value={donor._id}>{donor.name}</MenuItem>
+              <Typography variant="subtitle1">Assign Donors</Typography>
+              <FormGroup>
+                {donorsList && donorsList.map((donor) => (
+                  <FormControlLabel
+                    key={donor._id}
+                    control={
+                      <Checkbox
+                        checked={formData.donors.includes(donor._id)}
+                        onChange={() => handleDonorToggle(donor._id)}
+                        name={donor.name}
+                      />
+                    }
+                    label={donor.name}
+                  />
                 ))}
-              </TextField>
+              </FormGroup>
             </Grid>
 
-            {/* Submit */}
+            {/* Submit Button */}
             <Grid item xs={12}>
-              <Button type="submit" variant="contained" color="primary" disabled={loading}>
-                {loading ? "Saving..." : "Save Student"}
+              <Button variant="contained" color="primary" type="submit" disabled={loading}>
+                {loading ? "Submitting..." : "Submit"}
               </Button>
             </Grid>
+
           </Grid>
         </form>
-
-        {/* Feedback */}
-        {response && <Alert severity="success">{response}</Alert>}
-        {error && <Alert severity="error">{error}</Alert>}
       </Paper>
     </Container>
   );
