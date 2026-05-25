@@ -19,7 +19,7 @@ This project focuses on managing core academic and organizational tasks such as 
 
 * **Role-Based Access**
 
-  * Admin, Teacher, and Student roles with different permissions and dashboards.
+  * Admin, Staff and Student roles with different permissions and dashboards.
 
 * **Admin Controls**
 
