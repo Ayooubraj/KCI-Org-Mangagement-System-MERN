@@ -470,7 +470,7 @@ const AddStudent = () => {
                 label="Age"
                 name="age"
                 type="number"
-                inputProps={{ min: 0, step: 1 }}
+                inputProps={{ min: 1, step: 1 }}
                 fullWidth
                 onChange={handleChange}
               />
