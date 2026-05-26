@@ -1,4 +1,7 @@
 export const provinceDistricts = {
+
+  // all districts
+  
   Koshi: [
     "Bhojpur",
     "Dhankuta",
