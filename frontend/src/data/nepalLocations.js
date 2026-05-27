@@ -27,7 +27,7 @@ export const provinceDistricts = {
     "Rautahat",
     "Saptari",
     "Sarlahi",
-    "Siraha",
+    "Siraha ",
   ],
 
   Bagmati: [
