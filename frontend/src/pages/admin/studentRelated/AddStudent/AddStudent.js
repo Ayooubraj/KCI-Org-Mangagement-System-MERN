@@ -1158,4 +1158,3 @@ onChange={(e) =>
 };
 
 export default AddStudent;
-
