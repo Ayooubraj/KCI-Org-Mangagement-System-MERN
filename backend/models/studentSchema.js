@@ -1,176 +1,249 @@
-const mongoose = require('mongoose');
+const mongoose = require("mongoose");
 
-const studentSchema = new mongoose.Schema({
-  firstname: {
-    type: String,
-    required: true
-  },
-  surname: {
-    type: String
-  },
-  studentNumber: {
-    type: String,
-    unique: true,
-    required: true
-  },
-  password: {
-    type: String
-  },
-
-  // Relationships
-  school: {
-    type: mongoose.Schema.Types.ObjectId,
-    ref: 'School',
-    required: true
-  },
-   region: {   // changed from district → region
-    type: mongoose.Schema.Types.ObjectId,
-    ref: 'Region',
-    required: true
-  },
-   
-//new update
-dob: Date,
-
-phone: String,
-
-province: String,
-
-district: String,
-
-currentAddress: String,
-
-maritalStatus: String,
-   
-   
-//  father informtion
-fatherName: String,
-fatherDob: Date,
-fatherAge: Number,
-fatherOccupation: String,
-fatherHealth: String,
-  fatherHealthSpecify: String,
-
-  // mother information
-  motherName: String,
-motherDob: Date,
-motherAge: Number,
-motherOccupation: String,
-motherHealth: String,
-motherHealthSpecify: String,
-
-  remarks: String,
-
-  // Siblings
-  siblings: [
+const siblingSchema = new mongoose.Schema(
   {
     name: String,
     age: Number,
     grade: String,
     school: String,
-  }
-  ],
-  
-  //Guardian information
+  },
+  { _id: false }
+);
 
-  guardianName: String,
-guardianDob: Date,
-guardianAge: Number,
-guardianRelation: String,
-guardianOccupation: String,
-guardianHealth: String,
-guardianHealthSpecify: String,
-  guardianRemarks: String,
+const studentSchema = new mongoose.Schema(
+  {
+    // =====================
+    // BASIC INFORMATION
+    // =====================
 
-  //Photos
+    name: {
+      type: String,
+      required: true,
+      trim: true,
+    },
 
-  photos: [String],
+    studentNumber: {
+      type: String,
+      required: true,
+      unique: true,
+    },
 
+    password: String,
 
-  donors: [
-    {
+    role: {
+      type: String,
+      default: "Student",
+    },
+
+    gender: {
+      type: String,
+      enum: ["Male", "Female", "Other"],
+    },
+
+    dob: Date,
+
+    age: Number,
+
+    phone: String,
+
+    province: String,
+
+    district: String,
+
+    address: String,
+
+    currentAddress: String,
+
+    // =====================
+    // SCHOOL RELATIONSHIP
+    // =====================
+
+    school: {
       type: mongoose.Schema.Types.ObjectId,
-      ref: 'Donor'
-    }
-  ],
+      ref: "School",
+      required: true,
+    },
 
-  role: {
-    type: String,
-    default: "Student"
-  },
-  age: {
-    type: Number
-  },
-  gender: {
-    type: String,
-    enum: ["Male", "Female", "Other"]
-  },
-  grade: {
-    type: String
-  },
-  address: {
-    type: String
-  },
+    region: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "Region",
+      required: true,
+    },
 
-  examResult: [
-    {
-      subName: {
+    grade: String,
+
+    // =====================
+    // PARENT INFORMATION
+    // =====================
+
+    maritalStatus: {
+      type: String,
+      enum: [
+        "Married",
+        "Separated",
+        "Widowed",
+        "Single Parent",
+      ],
+    },
+
+    fatherName: String,
+
+    fatherDob: Date,
+
+    fatherAge: Number,
+
+    fatherOccupation: String,
+
+    fatherHealth: {
+      type: String,
+      enum: ["Healthy", "Fair", "Poor", "Disabled"],
+    },
+
+    fatherHealthSpecify: String,
+
+    motherName: String,
+
+    motherDob: Date,
+
+    motherAge: Number,
+
+    motherOccupation: String,
+
+    motherHealth: {
+      type: String,
+      enum: ["Healthy", "Fair", "Poor", "Disabled"],
+    },
+
+    motherHealthSpecify: String,
+
+    remarks: String,
+
+    // =====================
+    // SIBLINGS
+    // =====================
+
+    siblings: [siblingSchema],
+
+    // =====================
+    // GUARDIAN (ORPHANS)
+    // =====================
+
+    guardianName: String,
+
+    guardianDob: Date,
+
+    guardianAge: Number,
+
+    guardianRelation: String,
+
+    guardianOccupation: String,
+
+    guardianHealth: {
+      type: String,
+      enum: ["Healthy", "Fair", "Poor", "Disabled"],
+    },
+
+    guardianHealthSpecify: String,
+
+    guardianRemarks: String,
+
+    // =====================
+    // PHOTOS
+    // =====================
+
+    profilePic: String,
+
+    studentPic: String,
+
+    familyPhoto: String,
+
+    housePhoto: String,
+
+    // =====================
+    // DONORS
+    // =====================
+
+    donors: [
+      {
         type: mongoose.Schema.Types.ObjectId,
-        ref: 'Subject'
+        ref: "Donor",
       },
-      marksObtained: {
-        type: Number,
-        default: 0
-      }
-    }
-  ],
+    ],
 
-  attendance: [
-    {
-      date: {
-        type: Date,
-        required: true
-      },
-      status: {
-        type: String,
-        enum: ['Present', 'Absent'],
-        required: true
-      },
-      subName: {
-        type: mongoose.Schema.Types.ObjectId,
-        ref: 'Subject',
-        required: true
-      }
-    }
-  ],
+    // =====================
+    // EXAM RESULTS
+    // =====================
 
-  photos: [
-    {
-      type: String
-    }
-  ],
-  budget: {
-    type: Number,
-    default: null
+    examResult: [
+      {
+        subName: {
+          type: mongoose.Schema.Types.ObjectId,
+          ref: "Subject",
+        },
+
+        marksObtained: {
+          type: Number,
+          default: 0,
+        },
+      },
+    ],
+
+    // =====================
+    // ATTENDANCE
+    // =====================
+
+    attendance: [
+      {
+        date: {
+          type: Date,
+          required: true,
+        },
+
+        status: {
+          type: String,
+          enum: ["Present", "Absent"],
+          required: true,
+        },
+
+        subName: {
+          type: mongoose.Schema.Types.ObjectId,
+          ref: "Subject",
+          required: true,
+        },
+      },
+    ],
+
+    // =====================
+    // BUDGET & MATERIALS
+    // =====================
+
+    budget: {
+      type: Number,
+      default: null,
+    },
+
+    materials: [
+      {
+        item: {
+          type: String,
+          required: true,
+        },
+
+        cost: {
+          type: Number,
+          required: true,
+        },
+
+        date: {
+          type: Date,
+          default: Date.now,
+        },
+      },
+    ],
   },
-
-  materials: [
-    {
-      item: {
-        type: String,
-        required: true
-      },
-      cost: {
-        type: Number,
-        required: true
-      },
-      date: {
-        type: Date,
-        default: Date.now
-      }
-    }
-  ]
-  
-});
+  {
+    timestamps: true,
+  }
+);
 
 module.exports = mongoose.model("Student", studentSchema);
