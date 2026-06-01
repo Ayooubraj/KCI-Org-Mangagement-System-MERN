@@ -28,6 +28,63 @@ const studentSchema = new mongoose.Schema({
     ref: 'Region',
     required: true
   },
+   
+//new update
+dob: Date,
+
+phone: String,
+
+province: String,
+
+district: String,
+
+currentAddress: String,
+
+maritalStatus: String,
+   
+   
+//  father informtion
+fatherName: String,
+fatherDob: Date,
+fatherAge: Number,
+fatherOccupation: String,
+fatherHealth: String,
+  fatherHealthSpecify: String,
+
+  // mother information
+  motherName: String,
+motherDob: Date,
+motherAge: Number,
+motherOccupation: String,
+motherHealth: String,
+motherHealthSpecify: String,
+
+  remarks: String,
+
+  // Siblings
+  siblings: [
+  {
+    name: String,
+    age: Number,
+    grade: String,
+    school: String,
+  }
+  ],
+  
+  //Guardian information
+
+  guardianName: String,
+guardianDob: Date,
+guardianAge: Number,
+guardianRelation: String,
+guardianOccupation: String,
+guardianHealth: String,
+guardianHealthSpecify: String,
+  guardianRemarks: String,
+
+  //Photos
+
+  photos: [String],
 
 
   donors: [
@@ -113,6 +170,7 @@ const studentSchema = new mongoose.Schema({
       }
     }
   ]
+  
 });
 
 module.exports = mongoose.model("Student", studentSchema);
