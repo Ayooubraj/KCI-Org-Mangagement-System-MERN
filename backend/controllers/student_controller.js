@@ -35,7 +35,7 @@ const studentRegister = async (req, res) => {
       region
     } = req.body;
 
-    // Hash password
+    // Hash password 
     let hashedPassword = null;
     if (password) {
       hashedPassword = await bcrypt.hash(password, 10);
