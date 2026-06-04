@@ -949,7 +949,7 @@ onChange={(e) =>
       className="add-student-section-title"
       gutterBottom
     >
-      3. Guardian Information (Only for Orphan Students)
+      3. Guardian Information (Only for Orphan Student)
     </Typography>
 
     <Grid   item
