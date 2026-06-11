@@ -16,7 +16,12 @@ const studentSchema = new mongoose.Schema(
     // BASIC INFORMATION
     // =====================
 
-    name: {
+    firstname: {
+      type: String,
+      required: true,
+      trim: true,
+    },
+    lastname: {
       type: String,
       required: true,
       trim: true,

@@ -22,7 +22,7 @@ const studentRegister = async (req, res) => {
   try {
     const {
       firstname,
-      surname,
+      lastname,
       studentNumber,
       password,
       sclassName,
@@ -45,7 +45,7 @@ const studentRegister = async (req, res) => {
     // Create new student
     const student = new Student({
       firstname,
-      surname,
+      lastname,
       studentNumber,
       password: hashedPassword,
       sclassName,
@@ -259,13 +259,13 @@ const addMaterialToStudent = async (req, res) => {
 // Search and filter students
 const searchStudents = async (req, res) => {
   try {
-    const { firstname, studentNumber, surname, address, schoolId, donorId, age, grade, gender, startsWith } = req.query;
+    const { firstname, studentNumber, lastname, address, schoolId, donorId, age, grade, gender, startsWith } = req.query;
 
     let query = {};
 
     if (firstname) query.firstname = { $regex: firstname, $options: "i" };
     if (studentNumber) query.studentNumber = studentNumber;
-    if (surname) query.surname = { $regex: surname, $options: "i" };
+    if (lastname) query.lastname = { $regex: lastname, $options: "i" };
     if (address) query.address = address;
     if (schoolId) query.school = schoolId;
     if (donorId) query.donors = donorId;
