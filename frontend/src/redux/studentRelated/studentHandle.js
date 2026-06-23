@@ -89,20 +89,16 @@ export const removeStuff = (id, address) => async (dispatch) => {
  */
 export const createStudent = createAsyncThunk(
   "student/createStudent",
-  async (studentData, { rejectWithValue }) => {
+  async (formData, { rejectWithValue }) => {
     try {
-      const formData = new FormData();
-      for (const key in studentData) {
-        formData.append(key, studentData[key]);
-      }
-
       const res = await axios.post(
         `${process.env.REACT_APP_BASE_URL}/studentRegister`,
         formData,
         { headers: { "Content-Type": "multipart/form-data" } }
       );
 
-      return res.data.student; // returned to slice's fulfilled case
+      // Make sure backend returns { student, message } or similar
+      return res.data.student;
     } catch (err) {
       return rejectWithValue(err.response?.data || err.message);
     }
