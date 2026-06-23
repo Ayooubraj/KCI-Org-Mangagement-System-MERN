@@ -15,61 +15,97 @@ const removeStudentAttendance = async (req, res) => { /* unchanged */ };
 // ---------------- New NGO-specific functions ----------------
 
 
-
-
 // Register a new student
 const studentRegister = async (req, res) => {
   try {
-    const {
-      firstname,
-      lastname,
-      studentNumber,
-      password,
-      sclassName,
-      school,
-      age,
-      gender,
-      grade,
-      address,
-      budget,
-      region
-    } = req.body;
+    const data = req.body;
 
-    // Hash password 
-    let hashedPassword = null;
-    if (password) {
-      hashedPassword = await bcrypt.hash(password, 10);
+    // ✅ Handle file uploads
+    if (req.files?.profilePic) data.profilePic = req.files.profilePic[0].path;
+    if (req.files?.studentPic) data.studentPic = req.files.studentPic[0].path;
+    if (req.files?.familyPhoto) data.familyPhoto = req.files.familyPhoto[0].path;
+    if (req.files?.housePhoto) data.housePhoto = req.files.housePhoto[0].path;
+
+    // ✅ Parse arrays/objects if sent as JSON strings
+    if (data.siblings) {
+      try { data.siblings = JSON.parse(data.siblings); } catch {}
+    }
+    if (data.promises) {
+      try { data.promises = JSON.parse(data.promises); } catch {}
+    }
+    if (data.donors) {
+      try { data.donors = JSON.parse(data.donors); } catch {}
     }
 
-
-    // Create new student
-    const student = new Student({
-      firstname,
-      lastname,
-      studentNumber,
-      password: hashedPassword,
-      sclassName,
-      school,
-      age,
-      gender,
-      grade,
-      address,
-      budget,
-      region
-      
-    });
-
+    // ✅ Create new student with all fields from AddStudent.js
+    const student = new Student(data);
     await student.save();
 
     res.status(201).json({
       message: "Student registered successfully",
-      student
+      student,
     });
   } catch (error) {
     console.error(error);
-    res.status(500).json(error);
+    res.status(500).json({ message: "Error registering student", error });
   }
 };
+
+
+
+// // Register a new student
+// const studentRegister = async (req, res) => {
+//   try {
+//     const {
+//       firstname,
+//       lastname,
+//       studentNumber,
+//       password,
+//       sclassName,
+//       school,
+//       age,
+//       gender,
+//       grade,
+//       address,
+//       budget,
+//       region
+//     } = req.body;
+
+//     // Hash password 
+//     let hashedPassword = null;
+//     if (password) {
+//       hashedPassword = await bcrypt.hash(password, 10);
+//     }
+
+
+//     // Create new student
+//     const student = new Student({
+//       firstname,
+//       lastname,
+//       studentNumber,
+//       password: hashedPassword,
+//       sclassName,
+//       school,
+//       age,
+//       gender,
+//       grade,
+//       address,
+//       budget,
+//       region
+      
+//     });
+
+//     await student.save();
+
+//     res.status(201).json({
+//       message: "Student registered successfully",
+//       student
+//     });
+//   } catch (error) {
+//     console.error(error);
+//     res.status(500).json(error);
+//   }
+// };
 
 // Student login
 const studentLogIn = async (req, res) => {
