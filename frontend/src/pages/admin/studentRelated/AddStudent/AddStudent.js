@@ -209,9 +209,14 @@ import { getAllDonors } from "../../../../redux/donorRelated/donorHandle";
 import "../AddStudent/AddStudent.css";
 import { provinceDistricts } from "../../../../data/nepalLocations";
 
+
 const AddStudent = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
+
+  const schools = useSelector((state) => state.school?.schools || []);
+  const regions = useSelector((state) => state.region?.regions || []);
+  const classes = useSelector((state) => state.sclass?.sclassesList || []);
 
   const { donorsList } = useSelector((state) => state.donor);
 
@@ -230,6 +235,9 @@ const AddStudent = () => {
     district: "",
     phone: "",
     currentAddress: "",
+    school: "",
+    sclassName: "",
+    region: "",
 
     healthStatus: "",
     healthSpecify: "",
@@ -556,6 +564,61 @@ const AddStudent = () => {
           onChange={handleChange}
         />
       </Grid>
+
+
+
+   {/* School Dropdown */}
+
+<Grid item xs={6}>
+  <TextField
+    select
+    label="School"
+    name="school"
+    fullWidth
+    value={formData.school || ""}
+    onChange={handleChange}
+  >
+    {schools && schools.map((s) => (
+      <MenuItem key={s._id} value={s._id}>{s.name}</MenuItem>
+    ))}
+  </TextField>
+</Grid>
+
+                  
+
+{/* Region Dropdown */}
+<Grid item xs={6}>
+  <TextField
+    select
+    label="Region"
+    name="region"
+    fullWidth
+    value={formData.region || ""}
+    onChange={handleChange}
+  >
+    {regions && regions.map((r) => (
+      <MenuItem key={r._id} value={r._id}>{r.name}</MenuItem>
+    ))}
+  </TextField>
+</Grid>
+                  
+
+{/* Class Dropdown */}
+<Grid item xs={6}>
+  <TextField
+    select
+    label="Class"
+    name="sclassName"
+    fullWidth
+    value={formData.sclassName || ""}
+    onChange={handleChange}
+  >
+    {classes && classes.map((c) => (
+      <MenuItem key={c._id} value={c._id}>{c.name}</MenuItem>
+    ))}
+  </TextField>
+</Grid>
+
 
       {/* Province */}
 

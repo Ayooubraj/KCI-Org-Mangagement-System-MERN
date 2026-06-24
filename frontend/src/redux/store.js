@@ -6,6 +6,8 @@ import { sclassReducer } from './sclassRelated/sclassSlice';
 import { teacherReducer } from './teacherRelated/teacherSlice';
 import { complainReducer } from './complainRelated/complainSlice';
 import donorReducer from "./donorRelated/donorSlice";
+import { regionReducer } from './regionRelated/regionSlice';
+import { schoolReducer } from './schoolRelated/schoolSlice';
 
 
 const store = configureStore({
@@ -16,7 +18,9 @@ const store = configureStore({
         notice: noticeReducer,
         complain: complainReducer,
         sclass: sclassReducer,
-        donor: donorReducer
+        donor: donorReducer,
+        region: regionReducer,
+        school: schoolReducer,
     },
 });
 

@@ -56,7 +56,7 @@ const ShowStudents = () => {
   // ✅ Updated columns to match new backend schema
   const studentColumns = [
     { id: 'firstname', label: 'First Name', minWidth: 150 },
-    { id: 'surname', label: 'Surname', minWidth: 150 },
+    { id: 'lastname', label: 'Last Name', minWidth: 150 },
     { id: 'studentNumber', label: 'Student Number', minWidth: 120 },
     { id: 'school', label: 'School', minWidth: 150 },
     { id: 'region', label: 'Region', minWidth: 150 },
@@ -66,7 +66,7 @@ const ShowStudents = () => {
   const studentRows = Array.isArray(studentsList) && studentsList.length > 0
     ? studentsList.map((student) => ({
         firstname: student.firstname,
-        surname: student.surname,
+        lastname: student.lastname,
         studentNumber: student.studentNumber,
         school: student.school?.name || "N/A",
         region: student.region?.name || "N/A",
