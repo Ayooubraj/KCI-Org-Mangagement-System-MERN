@@ -1,6 +1,6 @@
 const bcrypt = require('bcrypt');
 const Admin = require('../models/adminSchema.js');
-const Sclass = require('../models/sclassSchema.js');
+const grades = require('../models/gradeSchema.js');
 const Student = require('../models/studentSchema.js');
 const Teacher = require('../models/teacherSchema.js');
 const Subject = require('../models/subjectSchema.js');
@@ -86,7 +86,7 @@ const deleteAdmin = async (req, res) => {
   try {
     const result = await Admin.findByIdAndDelete(req.params.id);
 
-    await Sclass.deleteMany({ school: req.params.id });
+    await grades.deleteMany({ school: req.params.id });
     await Student.deleteMany({ school: req.params.id });
     await Teacher.deleteMany({ school: req.params.id });
     await Subject.deleteMany({ school: req.params.id });
