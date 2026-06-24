@@ -11,13 +11,20 @@ const {
 } = require('../controllers/admin-controller.js');
 
 const { 
+  gradeCreate, 
+  gradeList, 
+  getGradeDetail, 
+  getGradeStudents 
+} = require('../controllers/grade-controller.js');
+
+const { 
   sclassCreate, 
   sclassList, 
   deleteSclass, 
   deleteSclasses, 
   getSclassDetail, 
   getSclassStudents 
-} = require('../controllers/class-controller.js');
+} = require('../controllers/grade-controller.js');
 
 const { complainCreate, complainList } = require('../controllers/complain-controller.js');
 
@@ -156,12 +163,12 @@ router.post('/ComplainCreate', complainCreate);
 router.get('/ComplainList/:id', complainList);
 
 // ---------------- Sclass ----------------
-router.post('/SclassCreate', sclassCreate);
-router.get('/SclassList/:id', sclassList);
-router.get("/Sclass/:id", getSclassDetail);
-router.get("/Sclass/Students/:id", getSclassStudents);
-router.delete("/Sclasses/:id", deleteSclasses);
-router.delete("/Sclass/:id", deleteSclass);
+// or Grade
+router.post('/GradeCreate', gradeCreate);
+router.get('/Grades', gradeList);
+router.get('/Grade/:id', getGradeDetail);
+router.get('/Grade/Students/:id', getGradeStudents);
+
 
 // ---------------- Subject ----------------
 router.post('/SubjectCreate', subjectCreate);
