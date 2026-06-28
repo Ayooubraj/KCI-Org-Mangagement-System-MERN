@@ -61,8 +61,8 @@ const AdminHomePage = () => {
         <Grid item xs={12} md={3} lg={3}>
           <StyledPaper>
             <img src={Fees} alt="Fees" />
-            <Title>Fees Collection</Title>
-            <Data start={0} end={23000} duration={2.5} prefix="$" />
+            <Title>Student Fees Remaining</Title>
+            <Data start={0} end={10} duration={10} prefix="Rs" />
           </StyledPaper>
         </Grid>
         <Grid item xs={12} md={12} lg={12}>

@@ -216,7 +216,7 @@ const AddStudent = () => {
 
   const schools = useSelector((state) => state.school?.schools || []);
   const regions = useSelector((state) => state.region?.regions || []);
-  const classes = useSelector((state) => state.sclass?.sclassesList || []);
+  const grades = useSelector((state) => state.grade?.grades || []);
 
   const { donorsList } = useSelector((state) => state.donor);
 
@@ -236,7 +236,7 @@ const AddStudent = () => {
     phone: "",
     currentAddress: "",
     school: "",
-    sclassName: "",
+    gradeName: "",
     region: "",
 
     healthStatus: "",
@@ -603,18 +603,18 @@ const AddStudent = () => {
 </Grid>
                   
 
-{/* Class Dropdown */}
+{/* Grade Dropdown */}
 <Grid item xs={6}>
   <TextField
     select
-    label="Class"
-    name="sclassName"
+    label="Grade"
+    name="gradeName"
     fullWidth
-    value={formData.sclassName || ""}
+    value={formData.gradeName || ""}
     onChange={handleChange}
   >
-    {classes && classes.map((c) => (
-      <MenuItem key={c._id} value={c._id}>{c.name}</MenuItem>
+    {grades && grades.map((g) => (
+      <MenuItem key={g._id} value={g._id}>{g.gradeName}</MenuItem>
     ))}
   </TextField>
 </Grid>

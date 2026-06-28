@@ -7,6 +7,8 @@ import { Visibility, VisibilityOff } from '@mui/icons-material';
 // import kc_icon from "../assets/kc_icon.png"
 // import kc_icon_roundbg from "../assets/kc_icon_roundbg.png"
 import kclogo_green  from "../assets/kclogo_green.png"
+import manjeeta  from "../assets/manjeeta.jpg"
+
 import { LightPurpleButton } from '../components/buttonStyles';
 import styled from 'styled-components';
 import { loginUser } from '../redux/userRelated/userHandle';
@@ -263,7 +265,8 @@ const LoginPage = ({ role }) => {
                     sm={4}
                     md={7}
                     sx={{
-                        backgroundImage: `url(${kclogo_green})`,
+                        // backgroundImage: `url(${kclogo_green})`,
+                        backgroundImage: `url(${manjeeta})`,
                         backgroundRepeat: 'no-repeat',
                         backgroundColor: (t) =>
                             t.palette.mode === 'light' ? t.palette.grey[50] : t.palette.grey[900],
