@@ -8,7 +8,7 @@ import { complainReducer } from './complainRelated/complainSlice';
 import donorReducer from "./donorRelated/donorSlice";
 import { regionReducer } from './regionRelated/regionSlice';
 import { schoolReducer } from './schoolRelated/schoolSlice';
-
+import { gradeReducer } from './gradeRelated/gradeSlice';
 
 const store = configureStore({
     reducer: {
@@ -21,6 +21,7 @@ const store = configureStore({
         donor: donorReducer,
         region: regionReducer,
         school: schoolReducer,
+        grade: gradeReducer,
     },
 });
 
