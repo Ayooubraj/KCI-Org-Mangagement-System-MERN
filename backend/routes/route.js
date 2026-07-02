@@ -17,14 +17,7 @@ const {
   getGradeStudents 
 } = require('../controllers/grade-controller.js');
 
-const { 
-  sclassCreate, 
-  sclassList, 
-  deleteSclass, 
-  deleteSclasses, 
-  getSclassDetail, 
-  getSclassStudents 
-} = require('../controllers/grade-controller.js');
+
 
 const { complainCreate, complainList } = require('../controllers/complain-controller.js');
 
@@ -162,8 +155,8 @@ router.put("/Notice/:id", updateNotice);
 router.post('/ComplainCreate', complainCreate);
 router.get('/ComplainList/:id', complainList);
 
-// ---------------- Sclass ----------------
-// or Grade
+// ---------------- Grade ----------------
+
 router.post('/GradeCreate', gradeCreate);
 router.get('/Grades', gradeList);
 router.get('/Grade/:id', getGradeDetail);
